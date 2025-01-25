@@ -18,7 +18,7 @@ def get_binance_klines(symbol, start_date, end_date, interval):
     return requests.get(url, params=params).json()
 
 
-def create_crypto_DF(
+def create_crypto_df(
     symbol="BTCUSDT", start_date="2025-01-01", end_date="2025-01-11", interval="1d"
 ):
     data = get_binance_klines(symbol, start_date, end_date, interval)
