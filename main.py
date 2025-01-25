@@ -90,7 +90,7 @@ def plot_volatility_analysis(vol1, vol2, lead_lag_results, spillover_results, t1
                 annot=True, 
                 fmt='.3f', 
                 cmap='YlOrRd_r',
-                yticklabels=[f'{t1}→{t2}', f'{t2}→{t1}'],
+                yticklabels=[f'{t2}→{t1}', f'{t1}→{t2}'],
                 xticklabels=available_lags,
                 ax=ax2)
     ax2.set_title('Granger Causality p-values')
@@ -117,22 +117,24 @@ def plot_volatility_analysis(vol1, vol2, lead_lag_results, spillover_results, t1
     return fig
 
 def main():
-    t1 = 'BTCUSDT'
-    t2 = 'MSTR'
-    btc, mstr = create_dfs(t1, t2, "2024-06-01", "2025-01-24")
+    t1 = 'ETHUSDT'
+    t2 = 'TSLA'
+    df1, df2 = create_dfs(t1, t2, "2024-06-01", "2025-01-24")
+    save_df('results/', df1)
+    save_df('results/', df2)
     # mstr = pd.read_csv('results/MSTR_20241101-20250123.csv')
     # btc = pd.read_csv('results/BTCUSDT_20241101-20250122.csv')
 
-    mstr_eod, btc_eod = match_dates(mstr, btc)
-    mstr_vol, btc_vol = rolling_volatility(mstr_eod, btc_eod)
+    eod1, eod2 = match_dates(df1, df2)
+    vol1, vol2 = rolling_volatility(eod1, eod2)
 
-    lead_lag_results = compute_lead_lag(mstr_vol, btc_vol, 10)
-    spillover_results = compute_spillover(mstr_vol, btc_vol)
+    lead_lag_results = compute_lead_lag(vol1, vol2, 10)
+    spillover_results = compute_spillover(vol1, vol2)
     
     print(f"Lead/Lag Days: {lead_lag_results['lead_lag_days']}")
     print(f"Maximum Correlation: {lead_lag_results['max_correlation']:.4f}")
 
-    fig = plot_volatility_analysis(mstr_vol, btc_vol, lead_lag_results, spillover_results, t1=t1, t2=t2)
+    fig = plot_volatility_analysis(vol1, vol2, lead_lag_results, spillover_results, t1=t1, t2=t2)
     plt.savefig(
         f"results/{t1}-{t2}_variance_correlation.png",
         dpi=300,
