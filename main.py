@@ -117,13 +117,20 @@ def plot_volatility_analysis(vol1, vol2, lead_lag_results, spillover_results, t1
     return fig
 
 def main():
-    t1 = 'ETHUSDT'
-    t2 = 'TSLA'
-    df1, df2 = create_dfs(t1, t2, "2024-06-01", "2025-01-24")
-    save_df('results/', df1)
-    save_df('results/', df2)
+    # t1 = 'BTCUSDT'
+    # t2 = 'SMCI'
+    # df1, df2 = create_dfs(t1, t2, "2024-06-01", "2025-01-24")
+    # save_df('results/', df1)
+    # save_df('results/', df2)
     # mstr = pd.read_csv('results/MSTR_20241101-20250123.csv')
     # btc = pd.read_csv('results/BTCUSDT_20241101-20250122.csv')
+
+    t1 = 'SPY'
+    t2 = 'NVDA'
+    sd = '2024-06-01'
+    ed = '2025-01-24'
+    df1 = create_stock_df(t1, sd, ed)
+    df2 = create_stock_df(t2, sd, ed)
 
     eod1, eod2 = match_dates(df1, df2)
     vol1, vol2 = rolling_volatility(eod1, eod2)
